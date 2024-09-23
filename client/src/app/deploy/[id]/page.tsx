@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 export default function DeployDetailPage() {
   const params = useParams();
   const deployId = params.id;
+  
+
 
   const { data } = useGetDeploy(Number(deployId));
 
