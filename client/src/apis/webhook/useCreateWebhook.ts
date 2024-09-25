@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
-import webhookClient from "@/apis/core/webhookClient";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import webhookClient from "@/apis/core/webhookClient";
 
 interface CreateWebhookParams {
   owner: string;
@@ -30,10 +30,15 @@ const createWebhook = async ({
 };
 
 const useCreateWebhook = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createWebhook,
-    onSuccess: () => {
-      toast.success("웹훅 생성에 성공했습니다.");
+    onSuccess: (_, variables) => {
+      toast.success("웹훅이 성공적으로 생성되었습니다.");
+      queryClient.invalidateQueries({
+        queryKey: ["webhooks", variables.owner, variables.repo],
+      });
     },
     onError: (error) => {
       toast.error(error.message);

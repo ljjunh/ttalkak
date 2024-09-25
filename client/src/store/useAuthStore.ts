@@ -1,37 +1,42 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { UserInfo } from "@/types/userInfo";
+import Cookies from "js-cookie";
 
 interface AuthState {
-  accessToken: string | null; // 액세스 토큰을 저장할 변수
-  refreshToken: string | null; // 리프레시 토큰을 저장할 변수
-  userInfo: UserInfo | null; // 유저 정보
-  isLogin: boolean; // 로그인 여부
-  setAccessToken: (token: string | null) => void; // 엑세스 토큰을 설정하는 함수
-  setUserInfo: (info: UserInfo | null) => void; // 유저정보를 설정하는 함수
-  setIsLogin: (status: boolean) => void; // 로그인 상태를 설정하는 함수
-  logout: () => void; // 로그아웃 함수
+  accessToken: string | null;
+  userInfo: UserInfo | null;
+  isLogin: boolean;
+  setAccessToken: (token: string | null) => void;
+  setUserInfo: (info: UserInfo | null) => void;
+  logout: () => void;
 }
 
 // zustand 스토어 생성
 const useAuthStore = create<AuthState>()(
   // 상태를 지속적으로 저장하기 위해 persist 미들웨어 사용
   persist(
-    (set) => ({
+    (set, get) => ({
       // 초기상태와 상태를 변경하는 함수들을 정의
       accessToken: null,
-      refreshToken: null,
       userInfo: null,
       isLogin: false,
-      setAccessToken: (token) => set({ accessToken: token }),
+      setAccessToken: (token) => {
+        set({ accessToken: token, isLogin: !!token });
+        if (token) {
+          Cookies.set("isLogin", "true", { sameSite: "strict" });
+        } else {
+          Cookies.remove("isLogin");
+        }
+      },
       setUserInfo: (info) => set({ userInfo: info }),
-      setIsLogin: (status) => set({ isLogin: status }),
       logout: () => {
         set({
           accessToken: null,
           userInfo: null,
           isLogin: false,
         });
+        Cookies.remove("isLogin");
       },
     }),
     {
@@ -39,8 +44,8 @@ const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,
-        userInfo: state.userInfo,
         isLogin: state.isLogin,
+        userInfo: state.userInfo,
       }),
     }
   )

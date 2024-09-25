@@ -2,27 +2,37 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin5Line } from "react-icons/ri";
+import { ServiceType } from "@/types/deploy";
+import { Deployment } from "@/types/project";
+import { CreateProjectParams } from "@/types/project";
+import ConfirmModal from "@/components/ConfirmModal";
+import Modal from "@/app/projects/components/Modal";
 import DeploymentStatus from "@/app/projects/[id]/components/DeploymentStatus";
 import useGetProject from "@/apis/project/useGetProject";
-import { Deployment } from "@/types/deploy";
-import EditProjectForm from "@/app/projects/[id]/components/EditProjectForm";
 import useDeleteProject from "@/apis/project/useDeleteProject";
-import ConfirmModal from "@/app/projects/[id]/components/ConfirmModal";
+import useModifyProject from "@/apis/project/useModifyProject";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 interface ProjectContentProps {
   id: string;
 }
 
 export default function ProjectContent({ id }: ProjectContentProps) {
-  const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
   const router = useRouter();
+
   const { data: project } = useGetProject(Number(id));
+  const { mutate: modifyProject } = useModifyProject();
   const { mutate: deleteProject } = useDeleteProject();
 
-  const onClose = () => {
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const handleEditSubmit = (data: CreateProjectParams) => {
+    modifyProject({
+      projectId: project.id,
+      data,
+    });
     setEditModal(false);
   };
 
@@ -40,9 +50,12 @@ export default function ProjectContent({ id }: ProjectContentProps) {
   };
 
   const getLatestDeploy = (
-    deployments: Deployment[],
-    type: "FRONTEND" | "BACKEND"
+    deployments: Deployment[] | null,
+    type: ServiceType
   ): Deployment | null => {
+    if (!deployments) {
+      return null;
+    }
     return (
       deployments
         .filter((deploy) => deploy.serviceType === type)
@@ -68,20 +81,32 @@ export default function ProjectContent({ id }: ProjectContentProps) {
           <div className="flex-grow">
             <div className="grid grid-cols-2 gap-4">
               <DeploymentStatus
-                type="Frontend"
-                deploy={getLatestDeploy(project.deployments, "FRONTEND")}
+                type={ServiceType.FRONTEND}
+                deploy={getLatestDeploy(
+                  project.deployments,
+                  ServiceType.FRONTEND
+                )}
                 projectId={project.id}
               />
               <DeploymentStatus
-                type="Backend"
-                deploy={getLatestDeploy(project.deployments, "BACKEND")}
+                type={ServiceType.BACKEND}
+                deploy={getLatestDeploy(
+                  project.deployments,
+                  ServiceType.BACKEND
+                )}
                 projectId={project.id}
               />
             </div>
           </div>
         </div>
       </div>
-      <EditProjectForm isOpen={editModal} project={project} onClose={onClose} />
+      <Modal
+        isOpen={editModal}
+        onClose={() => setEditModal(false)}
+        onSubmit={handleEditSubmit}
+        project={project}
+        mode="edit"
+      />
       <ConfirmModal
         isOpen={deleteModal}
         onClose={() => setDeleteModal(false)}

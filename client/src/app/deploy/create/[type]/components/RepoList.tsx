@@ -8,7 +8,11 @@ interface RepoListProps {
   onRepoSelect: (repo: Repository) => void;
 }
 
-export function RepoList({ repos, selectedRepo, onRepoSelect }: RepoListProps) {
+export default function RepoList({
+  repos,
+  selectedRepo,
+  onRepoSelect,
+}: RepoListProps) {
   return (
     <ul className="divide-y" data-cy="repo-list">
       {repos.map((repo) => (

@@ -1,25 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { routes } from "@/constants/routeURL";
-import NavLink from "@/components/NavLink";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { FiMenu, FiX } from "react-icons/fi";
+import NavLink from "@/components/NavLink";
 import useAuthStore from "@/store/useAuthStore";
-import { useRouter } from "next/navigation";
+import { routes } from "@/constants/routeURL";
+import { FiMenu, FiX } from "react-icons/fi";
+
 const navItems = [
   { name: "내 프로젝트", path: routes.projects },
   { name: "사용량", path: routes.usage },
   { name: "활동내역", path: routes.activity },
   { name: "가이드", path: routes.guide },
+  { name: "대시보드", path: routes.dashboard },
 ];
 
 export default function NavBar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const { userInfo } = useAuthStore();
   const isLogin = useAuthStore((state) => state.isLogin);
   const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,12 +39,25 @@ export default function NavBar() {
 
   const AuthButton = () =>
     isLogin ? (
-      <button
-        onClick={handleLogout}
-        className="bg-black px-3 py-2 rounded-md font-bold text-white"
-      >
-        로그아웃
-      </button>
+      <div className="flex items-center">
+        <Link href={routes.mypage}>
+          {userInfo && (
+            <Image
+              src={userInfo.profileImage}
+              width={32}
+              height={32}
+              alt="profile_img"
+              className="rounded-full mr-8 bg-gray-200"
+            />
+          )}
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="bg-black px-3 py-2 rounded-md font-bold text-white"
+        >
+          로그아웃
+        </button>
+      </div>
     ) : (
       <Link
         href={routes.login}

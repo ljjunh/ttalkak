@@ -1,5 +1,5 @@
-import client from "@/apis/core/client";
 import { UserInfo } from "@/types/userInfo";
+import client from "@/apis/core/client";
 
 const getUserInfo = () => {
   return client.get<UserInfo>({

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import client from "@/apis/core/client";
 import { toast } from "react-toastify";
+import client from "@/apis/core/client";
 
 const deleteProject = async (projectId: string): Promise<void> => {
   const response = await client.delete({

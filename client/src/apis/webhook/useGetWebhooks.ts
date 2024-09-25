@@ -1,5 +1,5 @@
-import webhookClient from "@/apis/core/webhookClient";
 import { useQuery } from "@tanstack/react-query";
+import webhookClient from "@/apis/core/webhookClient";
 
 interface Webhook {
   id: number;
@@ -23,7 +23,10 @@ const getWebhooks = async ({
       repo,
     });
     return response.data as Webhook[];
-  } catch (error) {
+  } catch (error: any) {
+    if (error.state === 404) {
+      return [];
+    }
     throw new Error("웹훅 목록을 가져오는데 실패했습니다.");
   }
 };
@@ -32,6 +35,8 @@ const useGetWebhooks = (owner: string, repo: string) => {
   return useQuery<Webhook[], Error>({
     queryKey: ["webhooks", owner, repo],
     queryFn: () => getWebhooks({ owner, repo }),
+    enabled: !!owner && !!repo,
+    staleTime: 0,
   });
 };
 

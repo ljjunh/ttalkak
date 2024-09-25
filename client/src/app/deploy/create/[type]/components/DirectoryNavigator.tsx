@@ -8,7 +8,7 @@ interface DirectoryNavigatorProps {
   onBranchChange: (branch: string) => void;
 }
 
-export function DirectoryNavigator({
+export default function DirectoryNavigator({
   repoName,
   currentPath,
   onPathClick,

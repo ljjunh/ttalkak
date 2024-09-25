@@ -3,14 +3,14 @@ import {
   useMutation,
   UseMutationResult,
 } from "@tanstack/react-query";
-import client from "@/apis/core/client";
 import { toast } from "react-toastify";
-import { patchProjectParams } from "@/types/project";
+import { PatchProjectParams } from "@/types/project";
+import client from "@/apis/core/client";
 
 const modifyProject = async ({
   projectId,
   data,
-}: patchProjectParams): Promise<void> => {
+}: PatchProjectParams): Promise<void> => {
   const response = await client.patch({
     url: `project/${projectId}`,
     data,
@@ -23,7 +23,7 @@ const modifyProject = async ({
 const useModifyProject = (): UseMutationResult<
   void,
   Error,
-  patchProjectParams,
+  PatchProjectParams,
   unknown
 > => {
   const queryClient = useQueryClient();

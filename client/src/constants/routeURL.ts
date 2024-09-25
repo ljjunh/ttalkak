@@ -6,4 +6,6 @@ export const routes = {
   activity: "/activity",
   guide: "/guide",
   login: "/login",
+  mypage: "/mypage",
+  dashboard: "/dashboard",
 };

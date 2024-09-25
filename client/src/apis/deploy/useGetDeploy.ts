@@ -1,6 +1,6 @@
-import client from "@/apis/core/client";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { GetDeployResponse } from "@/types/deploy";
+import client from "@/apis/core/client";
 
 const getDeploy = async (deployId: number): Promise<GetDeployResponse> => {
   const response = await client.get<GetDeployResponse>({

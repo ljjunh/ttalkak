@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, Controller, useFieldArray, useWatch } from "react-hook-form";
+import { DatabaseType, ServiceType, Framework } from "@/types/deploy";
 import useDeployStore from "@/store/useDeployStore";
 import useCreateDeploy from "@/apis/deploy/useCreateDeploy";
 import useCreateWebhook from "@/apis/webhook/useCreateWebhook";
-import { DatabaseType, DeployType } from "@/types/deploy";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface DatabaseForm {
   databaseType: DatabaseType;
@@ -25,13 +25,8 @@ interface FormData {
 export default function BackendForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const projectId = searchParams.get("projectId"); // 프로젝트 ID
+  const projectId = searchParams.get("projectId");
   const typeParam = searchParams.get("type");
-  const serviceType: DeployType =
-    typeParam === "FRONTEND" || typeParam === "BACKEND" ? typeParam : null;
-
-  const { mutate: createDeploy } = useCreateDeploy();
-  const { mutate: createWebhook } = useCreateWebhook();
 
   const {
     githubRepositoryRequest,
@@ -49,7 +44,7 @@ export default function BackendForm() {
     defaultValues: {
       port: "8080",
       useDatabase: false,
-      databases: [{ databaseType: "MYSQL", databasePort: "" }],
+      databases: [{ databaseType: DatabaseType.MYSQL, databasePort: "" }],
     },
   });
 
@@ -58,18 +53,22 @@ export default function BackendForm() {
     name: "databases",
   });
 
-  const useDatabase = watch("useDatabase");
   const databaseTypes = useWatch({
     control,
     name: "databases",
     defaultValue: [],
   });
 
+  const useDatabase = watch("useDatabase");
+
+  const { mutate: createDeploy } = useCreateDeploy();
+  const { mutate: createWebhook } = useCreateWebhook();
+
   useEffect(() => {
     if (!useDatabase) {
       setValue("databases", []);
     } else if (fields.length === 0) {
-      append({ databaseType: "MYSQL", databasePort: "" });
+      append({ databaseType: DatabaseType.MYSQL, databasePort: "" });
     }
   }, [useDatabase, setValue, fields.length, append]);
 
@@ -87,13 +86,13 @@ export default function BackendForm() {
     createDeploy(
       {
         projectId: Number(projectId),
-        serviceType: serviceType,
+        serviceType: serviceType as ServiceType,
         hostingPort: Number(data.port),
         githubRepositoryRequest,
         versionRequest,
         databaseCreateRequests,
         env: null,
-        framework: "SPRINGBOOT",
+        framework: Framework.SPRINGBOOT,
       },
       {
         onSuccess: (responseData) => {
@@ -109,6 +108,11 @@ export default function BackendForm() {
       }
     );
   };
+
+  const serviceType: ServiceType | null =
+    typeParam === "FRONTEND" || typeParam === "BACKEND"
+      ? (typeParam as ServiceType)
+      : null;
 
   return (
     <>
@@ -373,7 +377,7 @@ export default function BackendForm() {
               <button
                 type="button"
                 onClick={() =>
-                  append({ databaseType: "MYSQL", databasePort: "" })
+                  append({ databaseType: DatabaseType.MYSQL, databasePort: "" })
                 }
                 className="mt-4 py-2 px-4 border text-black rounded-md focus:outline-none"
               >

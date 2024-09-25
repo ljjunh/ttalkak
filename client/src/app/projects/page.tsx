@@ -1,48 +1,47 @@
 "use client";
 
-import { IoIosSearch } from "react-icons/io";
-import { FaSort } from "react-icons/fa";
 import { useState } from "react";
 import Link from "next/link";
+import {
+  GetProjectsParams,
+  Project,
+  CreateProjectParams,
+} from "@/types/project";
+import useAuthStore from "@/store/useAuthStore";
 import Modal from "@/app/projects/components/Modal";
 import useGetProjects from "@/apis/project/useGetProjects";
 import useCreateProject from "@/apis/project/useCreateProject";
-import useAuthStore from "@/store/useAuthStore";
 import getRelativeTime from "@/utils/getRelativeTime";
-import { getProjectsParams, Project } from "@/types/project";
+import { IoIosSearch } from "react-icons/io";
+import { FaSort } from "react-icons/fa";
 
 export default function ProjectsPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [sortOrder, setSortOrder] = useState("createdAt");
-  const [direction, setDirection] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(0);
-
   const userInfo = useAuthStore((state) => state.userInfo);
   const { mutate: createProject } = useCreateProject();
 
-  const params: getProjectsParams = {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [direction, setDirection] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const params: GetProjectsParams = {
     page: currentPage,
     size: 9,
-    sort: sortOrder,
+    sort: "createdAt",
     direction: direction.toUpperCase(),
-    userId: userInfo?.userId ?? 0, // 타입때문에 임시조치. 비로그인 접근을 막아야됨
+    userId: userInfo?.userId,
     searchKeyword,
   };
 
-  const handleCreateProject = (projectName: string, domainName: string) => {
-    createProject(
-      { projectName, domainName },
-      {
-        onSuccess: () => {
-          setIsModalOpen(false);
-        },
-      }
-    );
-  };
+  const { data } = useGetProjects(params);
 
-  const { data, isLoading, error, isFetching } = useGetProjects(params);
-  // isLoading일때 suspense fallback으로 skeletonUI 만들기
+  const handleCreateProject = (data: CreateProjectParams) => {
+    createProject(data, {
+      onSuccess: () => {
+        setIsModalOpen(false);
+      },
+    });
+  };
 
   return (
     <div>
@@ -143,6 +142,7 @@ export default function ProjectsPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateProject}
+        mode="create"
       />
     </div>
   );

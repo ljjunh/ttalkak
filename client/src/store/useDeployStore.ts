@@ -21,7 +21,7 @@ interface DeployStoreState extends DeployData {
 }
 
 const initialState: DeployData = {
-  framework: null,
+  framework: Framework.SPRINGBOOT,
   githubRepositoryRequest: {
     repositoryOwner: "",
     repositoryName: "",

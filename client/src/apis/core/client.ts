@@ -1,10 +1,8 @@
-// AxiosInstance는 axios의 인스턴스 타입, AxiosRequestConfig는 요청 설정 타입, Method는 HTTP 메서드 타입
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from "axios";
-// qs는 쿼리 문자열을 파싱하고 문자열화하는 라이브러리
 import qs from "qs";
+import { toast } from "react-toastify";
 import { ApiResponse } from "@/apis/core/type";
 import useAuthStore from "@/store/useAuthStore";
-import { toast } from "react-toastify";
 
 // axios 인스턴스 생성
 // axios.create()를 사용해서 커스텀 설정을 가진 새로운 axios 인스턴스 생성

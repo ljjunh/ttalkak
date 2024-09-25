@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import webhookClient from "@/apis/core/webhookClient";
 import { toast } from "react-toastify";
+import webhookClient from "@/apis/core/webhookClient";
 
 interface DeleteWebhookParams {
   owner: string;
@@ -21,9 +21,11 @@ const useDeleteWebhook = () => {
 
   return useMutation({
     mutationFn: deleteWebhook,
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       toast.success("웹훅이 성공적으로 삭제되었습니다.");
-      // 쿼리 무효화 해야됨. 프로젝트 상세 쿼리무효화
+      queryClient.invalidateQueries({
+        queryKey: ["webhooks", variables.owner, variables.repo],
+      });
     },
     onError: (error) => {
       toast.error(error.message);

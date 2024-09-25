@@ -5,7 +5,10 @@ interface SearchBarProps {
   setSearchTerm: (term: string) => void;
 }
 
-export function SearchBar({ searchTerm, setSearchTerm }: SearchBarProps) {
+export default function SearchBar({
+  searchTerm,
+  setSearchTerm,
+}: SearchBarProps) {
   return (
     <div className="mb-4 relative">
       <input

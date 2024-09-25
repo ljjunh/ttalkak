@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export default function SkeletonUI() {
+export default function ProjectLoading() {
   return (
     <div className="w-full p-8 bg-white rounded-md border mx-auto">
       <div className="flex flex-col gap-6">
