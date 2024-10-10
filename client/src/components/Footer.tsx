@@ -4,7 +4,7 @@ import { IoLogoGithub } from "react-icons/io";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#f2f2f2] text-[#5e5e5e] mt-auto w-full text-sm">
+    <footer className="bg-[#f2f2f2] text-[#5e5e5e] mt-auto w-full text-sm relative z-[-1]">
       <div className="px-10">
         <div className="py-4 flex flex-col md:flex-row items-start justify-between">
           <div>
@@ -41,7 +41,7 @@ export default function Footer() {
                 alt="딸깍 아이콘"
                 width={16}
                 height={16}
-                className="opacity-50 mr-2.5"
+                className="opacity-50 mr-2.5 z-[-2]"
               />
               <IoLogoGithub className="mr-2" size={18} />
               Ttalkak is always with Github.
