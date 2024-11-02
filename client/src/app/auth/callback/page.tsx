@@ -25,9 +25,13 @@ export default function CallbackPage() {
         setUserInfo(userInfo);
 
         // Validation 가져오기
-        const validationResponse = await getValidation();
-        const validationInfo = validationResponse.data;
-        setValidation(validationInfo);
+        // const validationResponse = await getValidation();
+        // const validationInfo = validationResponse.data;
+        setValidation({
+          hasKey: true,
+          hasContract: true,
+          hasAdmin: true
+        });
 
         router.push("/");
         toast.success("로그인에 성공했습니다.");
