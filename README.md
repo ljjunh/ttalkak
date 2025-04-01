@@ -33,17 +33,19 @@
 
 ##### 📊 I. 기술 스택
 
-##### 💁 II. 구현 화면
+##### 🎥 II. 시연 영상
 
-##### 💻 III. 주요 기술 설명
+##### 💁 III. 구현 화면
 
-##### 📑 IV. 프로젝트 설계
+##### 💻 IV. 주요 기술 설명
+
+##### 📑 V. 프로젝트 설계
 
 ---
 
 <br/>
 
-##### 📊 기술 스택
+## 📊 기술 스택
 
 | **Section**                  | **Details**                                                                                                                                                             |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -54,40 +56,33 @@
 | **DB**                       | - PostgreSQL, Redis, Elastic Search                                                                                                                                     |
 | **Library**                  | - pgrok, Spring Security                                                                                                                                                |
 | **Protocol & Message Queue** | - OpenFeign, Kafka                                                                                                                                                      |
-| **Server**                   | -                                                                                                                                                                       |
 
-##### 💁 구현 화면
+## 🎥 시연 영상
+https://www.youtube.com/watch?v=oKMbkMw1-EI
 
-<summary> 메인페이지 </summary>
+## 💁 구현 화면
+
+- 메인페이지
 
 ![Image](https://github.com/user-attachments/assets/cc9fc83c-83d8-4f12-8cb4-f1cf8934be17)
   
 ![Image](https://github.com/user-attachments/assets/19a89dd8-3c83-4280-9345-ec7055c60926)
 
-<br/>
-<summary> Frontend, Backend 배포 </summary>
+- Frontend, Backend 배포
 <img width="746" alt="Image" src="https://github.com/user-attachments/assets/7b84a853-01ac-4647-807d-749e82ce9620" />
-
 <img width="744" alt="Image" src="https://github.com/user-attachments/assets/64855ed3-263e-4338-8fc8-3cb52766b6b3" />
 
-<br/>
-<summary> database 배포</summary>
-
+- database 배포
 <img width="743" alt="Image" src="https://github.com/user-attachments/assets/0a610d8b-4d3b-442c-a9c6-895b92d9e909" />
 
-
-<br/>
-<summary>Desktop 앱</summary>
+- Desktop 앱
 
 ![Image](https://github.com/user-attachments/assets/7b17fb5b-9689-4dc7-a241-eceb60476f2e)
-<br/>
 
-<summary>배포 화면</summary>
-  <img width="745" alt="Image" src="https://github.com/user-attachments/assets/a470383f-25e7-4fa3-928e-433951f004e5" />
+- 배포 화면
+<img width="745" alt="Image" src="https://github.com/user-attachments/assets/a470383f-25e7-4fa3-928e-433951f004e5" />
  
-<br/>
-<summary>대시 보드</summary>
-
+- 대시 보드
 <img width="907" alt="Image" src="https://github.com/user-attachments/assets/5405477e-0302-4294-924d-36cd69db159e" />
 
 ## 💻 주요 기술 설명
@@ -146,18 +141,16 @@
   - 사용자의 서비스 사용 패턴을 학습하고 개선점을 제안. 리버스 터널링을 통한 API 로그를 수집하고, 이를 로그스태시로 정리한 후, 키바나를 사용하여 시각화
 
 ## 아키텍처 설계
+![Image](https://github.com/user-attachments/assets/08d6cb0f-7b2f-4d2b-b276-51971dc190de)
 
-1. 아키텍쳐
-   ![Image](https://github.com/user-attachments/assets/08d6cb0f-7b2f-4d2b-b276-51971dc190de)
+### MSA(Microservices Architecture)
 
-   ### MSA(Microservices Architecture)
+- **이점**
+  - 서비스 간 독립성 증가로 유지보수와 확장성 향상.
+  - 각 서비스 경량화로 배포 및 업데이트 과정 간소화.
 
-   - **이점**
-     - 서비스 간 독립성 증가로 유지보수와 확장성 향상.
-     - 각 서비스 경량화로 배포 및 업데이트 과정 간소화.
+### Kafka와 SAGA 패턴
 
-   ### Kafka와 SAGA 패턴
-
-   - **데이터 일관성 보장**
-     - 분산 시스템에서 트랜잭션 관리 개선.
-     - 시스템 장애 발생 시에도 데이터 정합성 유지.
+- **데이터 일관성 보장**
+  - 분산 시스템에서 트랜잭션 관리 개선.
+  - 시스템 장애 발생 시에도 데이터 정합성 유지.
